@@ -21,22 +21,26 @@ pipeline{
                 sh 'dotnet build --no-restore'
             }
         }
+        stage("Testing all 3 Project - Parallel") {
+            failFast true
+            parallel {
+                stage("Run tests for Project 1"){
+                    steps{
+                        sh 'dotnet test TestProject1/TestProject1.csproj --no-build --verbosity normal'
+                    }
+                }
       
-        stage("Run tests for Project 1"){
-            steps{
-                sh 'dotnet test TestProject1/TestProject1.csproj --no-build --verbosity normal'
-            }
-        }
-      
-       stage("Run tests for Project 2"){
-            steps{
-                sh 'dotnet test TestProject2/TestProject2.csproj --no-build --verbosity normal'
-            }
-        }
+               stage("Run tests for Project 2"){
+                   steps{
+                       sh 'dotnet test TestProject2/TestProject2.csproj --no-build --verbosity normal'
+                    }
+                } 
 
-       stage("Run tests for Project 3"){
-            steps{
-                sh 'dotnet test TestProject3/TestProject3.csproj --no-build --verbosity normal'
+               stage("Run tests for Project 3"){
+                    steps{
+                        sh 'dotnet test TestProject3/TestProject3.csproj --no-build --verbosity normal'
+                    }
+                }
             }
         }
     }
